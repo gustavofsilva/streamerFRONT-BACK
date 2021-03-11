@@ -1,0 +1,166 @@
+<br>
+<div class="d-flex">
+  <br>
+  <button class="btn btn-outline-primary" (click)="novoEvento(template)">
+    <i class="fa fa-plus-circle"></i>&nbsp;
+    Novo Project
+  </button>&nbsp;
+  <button class="btn btn-outline-primary" (click)="getEventos()">
+    <i class="fa fa-plus-circle"></i>&nbsp;
+    List Eventos
+  </button>
+</div>
+
+<br>
+
+<div class="d-flex">
+  <br>  
+  <input type="text" #box />&nbsp;
+  <button class="btn btn-outline-primary" (click)="getById(box.value)">    
+    Pesquisar ID
+  </button>  
+</div>
+
+<div  > 
+  {{eventoId.id}} - {{eventoId.name}} -
+  {{eventoId.why}} - {{eventoId.what}} -
+  {{eventoId.whatWillWeDo}} - {{eventoId.courseId}} - {{eventoId.image}}
+</div>
+
+<br>
+
+<div class="d-flex">
+  <br>  
+  <input type="text" #boxCourseId />&nbsp;
+  <button class="btn btn-outline-primary" (click)="getByCourseId(boxCourseId.value)">    
+    Pesquisar By CourseId
+  </button>  
+</div>
+
+<br>
+
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <td>#</td>
+      <td>Name</td>
+      <td>Why</td>
+      <td>What</td>
+      <td>WhatWillWeDo</td>
+      <td>CourseId</td>
+      <td>Image</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let evento of eventos">
+      <td>{{evento.id}}</td>
+      <td>{{evento.name}}</td>
+      <td>{{evento.why}}</td>
+      <td>{{evento.what}}</td>
+      <td>{{evento.whatWillWeDo}}</td>
+      <td>{{evento.courseId}}</td>
+      <td>
+        {{evento.image}}<br>
+        <!-- <img src="{{evento.image}}"
+        [style.width.px] = 50
+        [style.margin.px] = 50>-->
+      </td>
+      <td>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="editarEvento(evento, template)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="deleteEvento(evento)">
+            <i class="fa fa-eraser"></i>
+          </button>
+        </div>
+        
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div bsModal #template="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Large modal</h4>
+        <button type="button" class="close pull-right" (click)="template.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="registerForm">
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label>Name</label>
+              <input type="text" class="form-control" 
+              [ngClass]="{'is-invalid': registerForm.controls['name'].errors && registerForm.controls['name'].touched}"
+              formControlName="name" placeholder="Insira o nome!">      
+              <div *ngIf ="registerForm.controls['name'].hasError('required') && registerForm.controls['name'].touched " class="invalid-feeback" >
+                Nome é obrigatório!
+              </div>
+              <div *ngIf ="registerForm.controls['name'].hasError('minlength') && registerForm.controls['name'].touched" class="invalid-feeback" >
+                Sem tamanho mínimo!
+              </div>
+              <div *ngIf ="registerForm.controls['name'].hasError('maxlength') && registerForm.controls['name'].touched" class="invalid-feeback" >
+                Com tamanho máximo!
+              </div>
+            </div>
+          </div>  
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label>Why</label>
+              <input type="text" class="form-control" formControlName="why">
+            </div>
+            <div class="form-group col-md-4">
+              <label>What</label>
+              <input type="text" class="form-control" formControlName="what">
+            </div>
+          </div>  
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label>What Will We Do</label>
+              <input type="text" class="form-control" formControlName="whatWillWeDo">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Imagem</label>
+              <input type="text" class="form-control" formControlName="image">
+            </div>
+            <div class="form-group col-md-9">
+              <label>Course</label>
+              <input type="text" class="form-control" 
+              [ngClass]="{'is-invalid': registerForm.controls['courseId'].errors && registerForm.controls['courseId'].touched}"
+             formControlName="courseId" placeholder="*Curso não tratado*">
+             <div *ngIf ="registerForm.controls['courseId'].hasError('required') && registerForm.controls['courseId'].touched" class="invalid-feeback" >
+              Curso é obrigatório!
+            </div>
+              
+            </div>
+          </div>  
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="template.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" [disabled]="!registerForm.valid" (click)="salvarAlteracao(template)">
+          Salvar Alterações
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<br>
+
+<br>
+<br>
+
+
