@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SS_API.Model
 {
@@ -31,9 +32,9 @@ namespace SS_API.Model
             
         }
 
-        [Required]
         public Course Course { get; set; }
-        
+
+        [ForeignKey("Course")]        
         public int CourseId { get; set; }
 
     }

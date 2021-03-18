@@ -8,8 +8,8 @@ using SS_API.Data;
 namespace SS_API.Migrations
 {
     [DbContext(typeof(StreamerContext))]
-    [Migration("20210308174347_Project")]
-    partial class Project
+    [Migration("20210318112805_PopulaCourse")]
+    partial class PopulaCourse
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

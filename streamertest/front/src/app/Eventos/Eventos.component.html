@@ -21,11 +21,6 @@
   </button>  
 </div>
 
-<div  > 
-  {{eventoId.id}} - {{eventoId.name}} -
-  {{eventoId.why}} - {{eventoId.what}} -
-  {{eventoId.whatWillWeDo}} - {{eventoId.courseId}} - {{eventoId.image}}
-</div>
 
 <br>
 
@@ -48,7 +43,7 @@
       <td>Why</td>
       <td>What</td>
       <td>WhatWillWeDo</td>
-      <td>CourseId</td>
+      <td>Course</td>
       <td>Image</td>
     </tr>
   </thead>
@@ -59,7 +54,7 @@
       <td>{{evento.why}}</td>
       <td>{{evento.what}}</td>
       <td>{{evento.whatWillWeDo}}</td>
-      <td>{{evento.courseId}}</td>
+      <td>{{evento.course?.name}}</td>
       <td>
         {{evento.image}}<br>
         <!-- <img src="{{evento.image}}"
@@ -71,7 +66,7 @@
           <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="editarEvento(evento, template)">
             <i class="fa fa-edit"></i>
           </button>
-          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="deleteEvento(evento)">
+          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="openModalConfirm(evento, smallTemplate)">
             <i class="fa fa-eraser"></i>
           </button>
         </div>
@@ -129,15 +124,18 @@
               <label>Imagem</label>
               <input type="text" class="form-control" formControlName="image">
             </div>
-            <div class="form-group col-md-9">
-              <label>Course</label>
-              <input type="text" class="form-control" 
-              [ngClass]="{'is-invalid': registerForm.controls['courseId'].errors && registerForm.controls['courseId'].touched}"
-             formControlName="courseId" placeholder="*Curso não tratado*">
-             <div *ngIf ="registerForm.controls['courseId'].hasError('required') && registerForm.controls['courseId'].touched" class="invalid-feeback" >
-              Curso é obrigatório!
-            </div>
-              
+
+            <div class="form-group col-md-8">
+              Curso
+              <select class="form-control" [ngClass]="{'is-invalid': registerForm.controls['courseId'].errors && registerForm.controls['courseId'].touched}"
+              formControlName="courseId">
+                <option value="1">1 - Português</option>
+                <option value="2">2 - Física</option>
+                <option value="3">3 - Matemática</option>
+              </select>
+              <div *ngIf ="registerForm.controls['courseId'].hasError('required') && registerForm.controls['courseId'].touched " class="invalid-feeback" >
+                Estado de saúde é obrigatório!
+              </div>
             </div>
           </div>  
           
@@ -156,6 +154,17 @@
   </div>
 </div>
 
+
+
+<div class="modal fade bd-example-modal-sm" bsModal #smallTemplate="bs-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      Tem certeza que deseja Deletar?
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeConfirmModal(smallTemplate)">Close</button>
+      <button type="button" class="btn btn-primary" (click)="deleteEvento(smallTemplate)">Confirm delete</button>
+    </div>
+  </div>
+</div>
 
 
 <br>

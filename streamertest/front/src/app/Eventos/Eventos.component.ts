@@ -20,6 +20,7 @@ export class EventosComponent implements OnInit {
   modoSalvar : string = '';
   registerForm : FormGroup | any;
   idForm: FormGroup | any;
+  eventoDelete: Evento = new Evento ();
 
   constructor(
     private eventoService: EventoService
@@ -30,8 +31,10 @@ export class EventosComponent implements OnInit {
       }
 
   ngOnInit() {
-    this.getEventos();
+    
+    this.getEventos();    
     this.validation();
+
   }
   validation (){
     this.registerForm = this.fb.group ({
@@ -50,8 +53,32 @@ export class EventosComponent implements OnInit {
     if (this.registerForm.valid) {
       if (this.modoSalvar === 'post') {
         this.evento = Object
-        .assign({ Course: this.evento.Course }, this.registerForm.value); 
-        this.evento.courseId = 1;
+        .assign({ }, this.registerForm.value); 
+
+        try {
+          this.evento.courseId = Number(this.evento.courseId);
+          
+        } catch {
+          console.log("Erro ao converter ID do curso!");
+        }
+        this.evento.course = new Course();
+
+        if (this.evento.courseId == 1) {
+          this.evento.course.name = "Português";
+          this.evento.courseId = 1;
+          this.evento.course.id = 0;
+        }
+        if (this.evento.courseId == 2) {
+          this.evento.course.name = "Física";
+          this.evento.courseId = 2;
+          this.evento.course.id = 0;
+        }
+        if (this.evento.courseId == 3) {
+          this.evento.course.name = "Matemática";
+          this.evento.courseId = 3;
+          this.evento.course.id = 0;
+        }
+        console.log (this.evento);
 
         this.eventoService
         .postEvento(this.evento)
@@ -63,9 +90,17 @@ export class EventosComponent implements OnInit {
         );
         
       } else {
-        this.evento = Object.assign({ id: this.evento.id, Course: this.evento.Course }, this.registerForm.value);
-        this.evento.courseId = 1;
-        this.evento.Course = new Course();
+        this.evento = Object.assign({ id: this.evento.id }, this.registerForm.value);
+
+
+        try {
+          this.evento.courseId = Number(this.evento.courseId);
+        } catch {
+          console.log("Erro ao converter ID do curso!");
+        }
+        
+        console.log(this.evento.courseId);
+
         this.eventoService.putEvento(this.evento)
         .subscribe(
           (novoEvento: Evento) => {
@@ -84,16 +119,20 @@ export class EventosComponent implements OnInit {
     this.registerForm.reset();
     template.show();
   }
+
   getEventos(){
     this.eventoService
     .getAllEvento()
     .subscribe(
       response => {
         this.eventos = response;
+        console.log (this.eventos);
+        
       }, error => {
         console.log(error);
       }
     );
+    
   }
   getEventoById(){
     var id = Object.assign({ }, this.idForm.value);
@@ -120,13 +159,22 @@ export class EventosComponent implements OnInit {
     this.modoSalvar = 'post';
     this.openModal(template);
   }
+  openModalConfirm (evento: Evento, template: any){
+    template.show();
+    this.eventoDelete = evento;
+  }
+  closeConfirmModal(template: any) {
+    template.hide();
+  }
 
-  deleteEvento(evento: Evento){
+  deleteEvento(template: any){
+
     this.eventoService
-    .deleteEvento(evento.id)
+    .deleteEvento(this.eventoDelete.id)
     .subscribe(
       () => {
         this.getEventos();
+        template.hide();
       }, error => {
         console.log(error);
       }
@@ -145,7 +193,8 @@ export class EventosComponent implements OnInit {
         if (response.id != Number(id)) {
           return;          
         } 
-        this.eventoId = response;
+        this.eventos = [];
+        this.eventos.push(response);
         
       }, error => {
         console.log(error);

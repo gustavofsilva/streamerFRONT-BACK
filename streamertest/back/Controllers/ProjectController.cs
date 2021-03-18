@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SS_API.Model;
@@ -19,6 +20,7 @@ namespace SS_API.Controllers
 
         [HttpGet]
         public IEnumerable<Project> List (){
+            
             return _contexto.Projects;
         }
 
@@ -34,17 +36,9 @@ namespace SS_API.Controllers
 
         [HttpPut("{project}")] 
         public bool Update (Project project) {
-            Project _project;
-            try {
-                _project = GetById(project.Id);
-                if (_project == null) return false;
-                _project.Name = project.Name;
-                _project.Image = project.Image;
-                _project.Why = project.Why;
-                _project.What = project.What;
-                _project.WhatWillWeDo = project.WhatWillWeDo;
-                _project.CourseId = project.CourseId;
-                _contexto.Update(_project);
+
+            try {                
+                _contexto.Update(project);
                 return true;
             } catch {
                 return false;

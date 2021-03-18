@@ -13,5 +13,5 @@ export class Evento {
     what: string='';
     whatWillWeDo: string='';
     courseId: number=0;
-    Course: Course = new Course();
+    course: Course = new Course();
 }
